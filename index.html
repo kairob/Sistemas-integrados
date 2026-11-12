@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f7fb" />
+    <meta name="description" content="PlanejaFácil e Conta Fácil by KAIROB — gestão simples de custos e caixa." />
+    <title>PlanejaFácil by KAIROB | KAIROB Sistemas Integrados</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  color: #182238;
+  background: #f5f7fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #182238;
+  --muted: #78839a;
+  --line: #e7eaf1;
+  --surface: #fff;
+  --blue: #315bea;
+  --blue-dark: #2449cc;
+  --navy: #111b32;
+  --green: #16845d;
+  --shadow: 0 10px 35px rgba(31, 48, 80, .045);
+}
+
+* { box-sizing: border-box; }
+body { min-width: 320px; margin: 0; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+.app-shell { min-height: 100vh; }
+
+.sidebar {
+  position: fixed; inset: 0 auto 0 0; z-index: 5; display: flex; width: 246px;
+  flex-direction: column; padding: 28px 17px 20px; color: #d8dfed; background: var(--navy);
+}
+.brand { display: flex; align-items: center; gap: 11px; padding: 0 9px 34px; color: #fff; text-decoration: none; }
+.brand-mark { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 12px; background: #456df2; font: 800 20px Manrope, sans-serif; box-shadow: 0 6px 16px #315bea55; }
+.brand-copy { display: grid; gap: 1px; }
+.brand-copy strong { font: 700 15px Manrope, sans-serif; letter-spacing: .01em; }
+.brand-copy small { color: #94a0b6; font-size: 10px; letter-spacing: .04em; }
+.sidebar-label { padding: 0 11px 12px; color: #77839b; font-size: 9px; font-weight: 700; letter-spacing: .13em; }
+.nav-item { display: flex; align-items: center; gap: 11px; width: 100%; margin: 3px 0; padding: 12px 11px; border: 0; border-radius: 9px; color: #aeb9ce; background: transparent; text-align: left; font-size: 12px; font-weight: 600; }
+.nav-item:hover { color: #fff; background: #ffffff0b; }
+.nav-item.is-active { color: #fff; background: #315bea; box-shadow: 0 7px 16px #315bea33; }
+.nav-icon { width: 17px; color: #a5b4d0; font-size: 16px; text-align: center; }
+.nav-item.is-active .nav-icon { color: #fff; }
+.nav-tag { margin-left: auto; color: #8997b2; font-size: 8px; font-weight: 700; letter-spacing: .08em; }
+.nav-item.is-active .nav-tag { color: #dbe4ff; }
+.sidebar-spacer { flex: 1; }
+.sidebar-foot { display: flex; align-items: center; gap: 10px; padding: 15px 8px 3px; border-top: 1px solid #ffffff14; }
+.avatar { display: grid; width: 32px; height: 32px; flex: 0 0 auto; place-items: center; border: 1px solid #ffffff20; border-radius: 50%; color: #fff; background: #263653; font-size: 10px; font-weight: 700; }
+.sidebar-foot strong, .sidebar-foot small { display: block; }
+.sidebar-foot strong { color: #dce4f2; font-size: 9px; }
+.sidebar-foot small { margin-top: 4px; color: #8996ad; font-size: 8px; }
+
+.main-content { min-height: 100vh; margin-left: 246px; padding: 0 40px 24px; }
+.topbar { display: flex; min-height: 65px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8ebf2; }
+.breadcrumbs { display: flex; align-items: center; gap: 10px; color: #8a94a8; font-size: 10px; }
+.breadcrumbs strong { color: #364158; font-weight: 600; }
+.prototype-pill { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border: 1px solid #f0e1ba; border-radius: 99px; color: #9b6b16; background: #fffaf0; font-size: 9px; font-weight: 700; }
+.prototype-pill span { width: 6px; height: 6px; border-radius: 50%; background: #e9a529; }
+.page-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 31px 0 19px; }
+.eyebrow { margin: 0 0 7px; color: #5873d2; font-size: 8px; font-weight: 700; letter-spacing: .14em; }
+h1, h2, p { margin-top: 0; }
+h1, h2 { font-family: Manrope, 'DM Sans', sans-serif; }
+h1 { margin-bottom: 7px; color: #17223a; font-size: clamp(22px, 2.1vw, 28px); font-weight: 800; letter-spacing: -.045em; }
+.page-description { margin: 0; color: #7a8599; font-size: 11px; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 38px; padding: 0 15px; border: 1px solid transparent; border-radius: 8px; font-size: 10px; font-weight: 700; transition: .15s ease; }
+.button-primary { color: #fff; background: var(--blue); box-shadow: 0 5px 11px #315bea24; }
+.button-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.button-primary span { font-size: 17px; font-weight: 400; }
+.button-wide { width: 100%; min-height: 43px; }
+.prototype-notice { display: flex; align-items: center; gap: 10px; margin-bottom: 17px; padding: 10px 13px; border: 1px solid #f0e7d5; border-radius: 8px; color: #75684c; background: #fffdf8; }
+.prototype-notice p { flex: 1; margin: 0; font-size: 9px; line-height: 1.5; }
+.notice-icon { display: grid; width: 16px; height: 16px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #8d6b2a; background: #f7ebcf; font-size: 10px; font-weight: 700; }
+.text-button { padding: 4px 2px; border: 0; color: #8a6a2e; background: transparent; font-size: 9px; font-weight: 700; white-space: nowrap; }
+.text-button:hover { text-decoration: underline; }
+
+.planning-filters { margin: 0 0 14px; padding: 15px 16px; }
+.filter-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 13px; }
+.filter-grid .field-label { margin-bottom: 5px; }
+.filter-hint { display: block; margin-top: 5px; color: #929bad; font-size: 8px; line-height: 1.35; }
+.filter-check { display: flex; align-items: center; gap: 8px; min-height: 39px; align-self: end; color: #53617b; font-size: 9px; font-weight: 600; }
+.filter-check input { width: 15px; height: 15px; accent-color: var(--blue); }
+.results-count { margin: -5px 0 6px; color: #8994a8; font-size: 8px; }
+.content-grid:has(> .form-panel[hidden]) { grid-template-columns: minmax(0, 1fr); }
+
+.summary-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 13px; margin-bottom: 17px; }
+.summary-card, .panel { border: 1px solid #e9ecf2; border-radius: 11px; background: var(--surface); box-shadow: var(--shadow); }
+.summary-card { min-height: 105px; padding: 15px 16px; }
+.summary-top { display: flex; align-items: center; justify-content: space-between; color: #778198; font-size: 9px; font-weight: 600; }
+.summary-icon { display: grid; width: 25px; height: 25px; place-items: center; border-radius: 8px; font-size: 12px; font-weight: 700; }
+.icon-blue { color: #4263d8; background: #eef2ff; }
+.icon-violet { color: #8154c2; background: #f5efff; }
+.icon-amber { color: #bd8422; background: #fff7e8; }
+.icon-green { color: #16845d; background: #eaf8f2; }
+.summary-value { display: block; margin: 12px 0 4px; color: #202b43; font: 800 20px Manrope, sans-serif; letter-spacing: -.035em; }
+.summary-value.is-over-budget { color: #bf4550; }
+.summary-value.is-under-budget { color: #16845d; }
+.summary-card small { color: #9aa3b3; font-size: 8px; }
+
+.content-grid { display: grid; grid-template-columns: minmax(360px, .94fr) minmax(350px, 1.06fr); align-items: start; gap: 15px; }
+.panel { min-width: 0; padding: 19px; }
+.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panel-heading .eyebrow { margin-bottom: 5px; font-size: 7px; }
+.panel h2 { margin: 0; color: #202b43; font-size: 15px; font-weight: 800; letter-spacing: -.025em; }
+.step-badge { padding: 5px 7px; border-radius: 5px; color: #6479c0; background: #f1f4ff; font-size: 7px; font-weight: 700; letter-spacing: .06em; white-space: nowrap; }
+.panel-intro { margin: 8px 0 19px; color: #8b95a7; font-size: 9px; line-height: 1.5; }
+.field-label { display: block; margin-bottom: 6px; color: #3b465e; font-size: 9px; font-weight: 700; }
+.text-input, .money-input { width: 100%; min-height: 39px; border: 1px solid #e1e5ee; border-radius: 7px; color: #26324a; background: #fff; outline: none; font-size: 10px; transition: border-color .15s, box-shadow .15s; }
+.text-input { padding: 0 11px; }
+.text-input::placeholder, .money-input input::placeholder { color: #a9b1c0; }
+.text-input:focus, .money-input:focus-within { border-color: #7791f1; box-shadow: 0 0 0 3px #315bea14; }
+select.text-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23778198' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 11px center; padding-right: 30px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.field-group { min-width: 0; }
+.money-input { display: flex; align-items: center; gap: 7px; padding: 0 10px; }
+.money-input > span { color: #818ba0; font-size: 10px; font-weight: 600; }
+.money-input input { width: 100%; min-width: 0; height: 37px; border: 0; outline: 0; color: #26324a; background: transparent; font-size: 10px; }
+.field-hint { display: block; margin: 5px 0 0; color: #9aa3b3; font-size: 8px; }
+.actual-amount-group { margin-top: 13px; }
+.field-error { min-height: 12px; margin: 3px 0 0; color: #c03e4c; font-size: 8px; }
+.check-row { display: flex; align-items: flex-start; gap: 9px; margin-top: 6px; padding: 11px 10px; border: 1px solid #edf0f5; border-radius: 7px; background: #fafbfe; cursor: pointer; }
+.check-row input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.check-mark { display: grid; width: 15px; height: 15px; flex: 0 0 auto; place-items: center; margin-top: 1px; border: 1px solid #cbd2e0; border-radius: 4px; background: #fff; }
+.check-row input:checked + .check-mark { border-color: var(--blue); background: var(--blue); }
+.check-row input:checked + .check-mark::after { content: '✓'; color: #fff; font-size: 10px; font-weight: 700; }
+.check-row input:focus-visible + .check-mark { outline: 3px solid #315bea35; }
+.check-row strong, .check-row small { display: block; }
+.check-row strong { color: #4b566d; font-size: 8px; }
+.check-row small { margin-top: 4px; color: #949daf; font-size: 8px; }
+.advanced-fields { margin-top: 13px; border-top: 1px solid #eff1f5; }
+.advanced-fields summary { display: flex; align-items: center; gap: 8px; padding: 12px 1px 4px; color: #53617b; cursor: pointer; font-size: 9px; font-weight: 700; list-style-position: inside; }
+.advanced-fields summary span { color: #9aa3b3; font-size: 8px; font-weight: 400; }
+.advanced-context { margin-top: 11px; }
+.advanced-row { margin-top: 11px; }
+.optional-label { color: #9aa3b3; font-size: 8px; font-weight: 400; }
+.text-area { min-height: 66px; padding-top: 9px; resize: vertical; line-height: 1.45; }
+.form-feedback { min-height: 18px; margin-top: 8px; color: #b04449; font-size: 9px; }
+.form-feedback.is-success { color: #16845d; }
+.form-actions { display: grid; gap: 8px; margin-top: 2px; }
+.secure-note { color: #8d97a8; font-size: 8px; text-align: center; }
+.secure-note span { padding-right: 4px; color: #50a780; font-size: 7px; }
+
+.activity-heading { margin-bottom: 13px; }
+.icon-button { display: grid; width: 29px; height: 29px; place-items: center; border: 1px solid #e9ecf2; border-radius: 7px; color: #78839a; background: #fff; font-size: 16px; }
+.icon-button:hover { color: var(--blue); background: #f6f8ff; }
+.activity-legend { display: flex; gap: 13px; padding: 10px 0; border-top: 1px solid #f0f2f6; border-bottom: 1px solid #f0f2f6; }
+.activity-legend span { display: inline-flex; align-items: center; gap: 5px; color: #929bad; font-size: 8px; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-plan { background: #8b9ef3; }
+.dot-waiting { background: #edb64b; }
+.dot-paid { background: #52ae83; }
+.cost-list { display: grid; }
+.cost-item { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid #f0f2f6; }
+.cost-item:last-child { border-bottom: 0; }
+.cost-symbol { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 9px; color: #526fd8; background: #f0f3ff; font-size: 12px; font-weight: 700; }
+.cost-main { min-width: 0; }
+.cost-main strong { display: block; overflow: hidden; color: #3c475d; font-size: 9px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.cost-note { display: block; margin-top: 5px; overflow: hidden; color: #8994a8; font-size: 8px; line-height: 1.4; text-overflow: ellipsis; }
+.cost-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 5px; color: #9ba4b3; font-size: 7px; }
+.status-pill { padding: 3px 6px; border-radius: 99px; font-size: 7px; font-weight: 700; }
+.status-planned { color: #526aca; background: #eef2ff; }
+.status-incurred { color: #a6741f; background: #fff5df; }
+.status-paid { color: #217b58; background: #e8f7ef; }
+.cost-side { display: grid; justify-items: end; gap: 5px; }
+.cost-amount { color: #344057; font-size: 9px; font-weight: 700; white-space: nowrap; }
+.cost-planned-note { color: #9aa3b3; font-size: 7px; white-space: nowrap; }
+.advance-button { padding: 2px 0; border: 0; color: #5971cf; background: transparent; font-size: 7px; font-weight: 700; }
+.advance-button:hover { text-decoration: underline; }
+.unplanned-label { color: #c27a2b; font-size: 7px; font-weight: 700; }
+.empty-state { display: grid; justify-items: center; padding: 43px 18px; color: #9aa3b3; text-align: center; }
+.empty-state > span { display: grid; width: 39px; height: 39px; place-items: center; margin-bottom: 12px; border-radius: 12px; color: #8192d0; background: #f0f3ff; font-size: 17px; }
+.empty-state strong { color: #566177; font-size: 10px; }
+.empty-state p { max-width: 205px; margin: 7px 0 0; font-size: 8px; line-height: 1.6; }
+.page-footer { display: flex; justify-content: space-between; gap: 12px; padding: 19px 3px 0; color: #a1a9b7; font-size: 8px; }
+
+@media (max-width: 1120px) {
+  .main-content { padding-right: 25px; padding-left: 25px; }
+  .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .content-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 700px) {
+  .sidebar { position: sticky; inset: 0 0 auto; width: 100%; height: auto; flex-direction: row; align-items: center; padding: 10px 14px; }
+  .brand { flex: 0 0 auto; gap: 8px; padding: 0 10px 0 0; }
+  .brand-mark { width: 31px; height: 31px; border-radius: 9px; font-size: 16px; }
+  .brand-copy strong { font-size: 12px; }
+  .brand-copy small { font-size: 8px; }
+  .sidebar-label, .sidebar-spacer, .sidebar-foot, .nav-tag { display: none; }
+  .nav-item { justify-content: center; gap: 5px; width: auto; margin: 0 2px; padding: 9px 8px; font-size: 9px; }
+  .nav-icon { display: none; }
+  .main-content { margin-left: 0; padding: 0 14px 18px; }
+  .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .topbar { min-height: 48px; }
+  .breadcrumbs { gap: 6px; font-size: 8px; }
+  .prototype-pill { padding: 5px 7px; font-size: 8px; }
+  .page-heading { align-items: flex-start; padding: 23px 0 15px; }
+  .page-heading > .button { min-height: 34px; padding: 0 9px; font-size: 8px; }
+  h1 { max-width: 320px; font-size: 23px; }
+  .page-description { max-width: 330px; font-size: 9px; line-height: 1.5; }
+  .prototype-notice { align-items: flex-start; flex-wrap: wrap; gap: 7px; padding: 9px; }
+  .prototype-notice p { min-width: calc(100% - 28px); font-size: 8px; }
+  .text-button { margin-left: 23px; }
+  .summary-grid { gap: 8px; }
+  .summary-card { min-height: 91px; padding: 11px; }
+  .summary-top { gap: 5px; font-size: 8px; }
+  .summary-icon { width: 22px; height: 22px; }
+  .summary-value { margin: 10px 0 3px; font-size: 17px; }
+  .summary-card small { font-size: 7px; }
+  .panel { padding: 15px 13px; }
+  .field-row { gap: 9px; }
+  .field-label { font-size: 8px; }
+  .text-input, .money-input { min-height: 37px; font-size: 9px; }
+  .money-input input { height: 35px; font-size: 9px; }
+  .activity-legend { gap: 9px; }
+  .page-footer { flex-direction: column; gap: 5px; }
+}
+@media (max-width: 380px) {
+  .nav-item { padding: 8px 6px; font-size: 8px; }
+  .brand-copy small { max-width: 84px; font-size: 7px; }
+  .field-row { grid-template-columns: 1fr; }
+  .summary-card small { line-height: 1.35; }
+}
+:where([hidden]) { display: none !important; }
+
+    </style>  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <a class="brand" href="#inicio" aria-label="KAIROB Sistemas Integrados, início">
+          <span class="brand-mark" aria-hidden="true">K</span>
+          <span class="brand-copy">
+            <strong>KAIROB</strong>
+            <small>Sistemas Integrados</small>
+          </span>
+        </a>
+
+        <div class="sidebar-label">SEU NEGÓCIO</div>
+        <button class="nav-item is-active" type="button" data-view="overview">
+          <span class="nav-icon" aria-hidden="true">▦</span> Visão geral
+        </button>
+        <button class="nav-item" type="button" data-view="planning">
+          <span class="nav-icon" aria-hidden="true">◷</span> PlanejaFácil
+          <span class="nav-tag">CUSTOS</span>
+        </button>
+        <button class="nav-item" type="button" data-view="cashflow">
+          <span class="nav-icon" aria-hidden="true">↗</span> Conta Fácil
+          <span class="nav-tag">CAIXA</span>
+        </button>
+
+        <div class="sidebar-spacer"></div>
+        <div class="sidebar-foot">
+          <span class="avatar">KI</span>
+          <span><strong>Ambiente de demonstração</strong><small>Dados locais deste navegador</small></span>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>KAIROB Sistemas Integrados</span><span aria-hidden="true">/</span><strong id="current-section">Visão geral</strong></div>
+          <span class="prototype-pill"><span></span> Protótipo local</span>
+        </header>
+
+        <section class="page-heading" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow" id="page-eyebrow">KAIROB SISTEMAS INTEGRADOS</p>
+            <h1 id="page-title">Visão geral do seu negócio.</h1>
+            <p class="page-description" id="page-description">Indicadores dos módulos contratados, consolidados em um só lugar.</p>
+          </div>
+          <button class="button button-primary" type="button" id="new-cost-top"><span aria-hidden="true">＋</span> Novo custo</button>
+        </section>
+
+        <div class="prototype-notice" role="note">
+          <span class="notice-icon" aria-hidden="true">i</span>
+          <p>Protótipo para validar a experiência. Os dados ficam apenas neste navegador; não use informações financeiras reais.</p>
+          <button type="button" id="clear-demo" class="text-button">Limpar demonstração</button>
+        </div>
+
+        <section class="summary-grid" data-module-view="overview" aria-label="Indicadores consolidados da visão geral">
+          <article class="summary-card">
+            <div class="summary-top"><span>Previstos no orçamento</span><span class="summary-icon icon-blue" aria-hidden="true">◷</span></div>
+            <strong class="summary-value" id="total-planned">R$ 0,00</strong>
+            <small>Custos marcados como planejados</small>
+          </article>
+          <article class="summary-card">
+            <div class="summary-top"><span>Custos realizados</span><span class="summary-icon icon-violet" aria-hidden="true">✓</span></div>
+            <strong class="summary-value" id="total-incurred">R$ 0,00</strong>
+            <small>Já aconteceram, pagos ou pendentes</small>
+          </article>
+          <article class="summary-card">
+            <div class="summary-top"><span>Diferença global</span><span class="summary-icon icon-violet" aria-hidden="true">±</span></div>
+            <strong class="summary-value" id="total-difference">R$ 0,00</strong>
+            <small>Previsto menos realizado</small>
+          </article>
+          <article class="summary-card">
+            <div class="summary-top"><span>A pagar</span><span class="summary-icon icon-amber" aria-hidden="true">⌛</span></div>
+            <strong class="summary-value" id="total-pending">R$ 0,00</strong>
+            <small>Realizados e ainda não pagos</small>
+          </article>
+          <article class="summary-card">
+            <div class="summary-top"><span>Saídas pagas</span><span class="summary-icon icon-green" aria-hidden="true">↘</span></div>
+            <strong class="summary-value" id="total-paid">R$ 0,00</strong>
+            <small>Pagamentos registrados no Conta Fácil</small>
+          </article>
+        </section>
+
+        <section class="panel planning-filters" data-module-view="planning" aria-label="Filtros de custos">
+          <div class="panel-heading">
+            <div><p class="eyebrow">CONSULTA RÁPIDA</p><h2>Encontre um custo</h2></div>
+            <button class="text-button" type="button" id="clear-cost-filters">Limpar filtros</button>
+          </div>
+          <div class="filter-grid">
+            <label class="field-group"><span class="field-label">Empresa</span><select class="text-input cost-filter" id="filter-company"><option value="">Todas as empresas</option></select></label>
+            <label class="field-group"><span class="field-label">Categoria</span><select class="text-input cost-filter" id="filter-category"><option value="">Todas as categorias</option></select></label>
+            <label class="field-group"><span class="field-label">Tipo</span><select class="text-input cost-filter" id="filter-type"><option value="">Todos os tipos</option></select></label>
+            <label class="field-group"><span class="field-label">Pedido ou referência</span><input class="text-input cost-filter" id="filter-order" type="search" list="order-filter-options" placeholder="Digite parte do pedido" autocomplete="off" /><datalist id="order-filter-options"></datalist><small class="filter-hint">Sugestões dos pedidos já cadastrados; busca por trecho.</small></label>
+            <label class="field-group"><span class="field-label">Observação</span><select class="text-input cost-filter" id="filter-observation"><option value="">Todas as observações</option></select></label>
+            <label class="field-group"><span class="field-label">Período</span><select class="text-input cost-filter" id="filter-month"><option value="">Todos os períodos</option></select></label>
+            <label class="filter-check" for="filter-unplanned"><input id="filter-unplanned" class="cost-filter" type="checkbox" /><span>Mostrar apenas custos não previstos</span></label>
+          </div>
+        </section>
+
+        <section class="content-grid">
+          <article class="panel form-panel" id="cost-form-panel" data-module-view="planning" hidden>
+            <div class="panel-heading">
+              <div><p class="eyebrow">PLANEJAFÁCIL BY KAIROB</p><h2>Registrar um custo</h2></div>
+              <span class="step-badge">NOVO LANÇAMENTO</span>
+              <button class="text-button" type="button" id="close-cost-form">Fechar</button>
+            </div>
+            <p class="panel-intro">Comece pelo essencial. Você pode ajustar ou completar os dados depois.</p>
+
+            <form id="cost-form" novalidate>
+              <label class="field-label" for="description">O que você precisa registrar?</label>
+              <input class="text-input" id="description" name="description" type="text" maxlength="100" placeholder="Ex.: compra de material de limpeza" autocomplete="off" required />
+              <p class="field-error" id="description-error" aria-live="polite"></p>
+
+              <div class="field-row">
+                <div class="field-group">
+                  <label class="field-label" for="planned-amount">Qual era o valor previsto?</label>
+                  <div class="money-input"><span>R$</span><input id="planned-amount" name="plannedAmount" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-describedby="planned-hint planned-error" /></div>
+                  <small class="field-hint" id="planned-hint">Valor de referência do planejamento</small>
+                  <p class="field-error" id="planned-error" aria-live="polite"></p>
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="category">Em qual categoria?</label>
+                  <select class="text-input" id="category" name="category">
+                    <option value="Fornecedores">Fornecedores</option>
+                    <option value="Aluguel">Aluguel</option>
+                    <option value="Equipe">Equipe</option>
+                    <option value="Materiais">Materiais</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Serviços">Serviços</option>
+                    <option value="Outra">Outra</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-row">
+                <div class="field-group">
+                  <label class="field-label" for="expected-date">Quando está previsto?</label>
+                  <input class="text-input" id="expected-date" name="expectedDate" type="date" required />
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="status">O que já aconteceu?</label>
+                  <select class="text-input" id="status" name="status">
+                    <option value="planned">Ainda é uma previsão</option>
+                    <option value="incurred">O custo aconteceu, falta pagar</option>
+                    <option value="paid">Já paguei esse custo</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-row actual-fields" id="actual-fields" hidden>
+                <div class="field-group">
+                  <label class="field-label" for="actual-amount">Valor realizado</label>
+                  <div class="money-input"><span>R$</span><input id="actual-amount" name="actualAmount" inputmode="decimal" autocomplete="off" placeholder="0,00" aria-describedby="actual-hint actual-error" /></div>
+                  <small class="field-hint" id="actual-hint">O valor realizado fica separado do previsto.</small>
+                  <p class="field-error" id="actual-error" aria-live="polite"></p>
+                </div>
+                <div class="field-group">
+                  <label class="field-label" for="occurred-date">Quando aconteceu?</label>
+                  <input class="text-input" id="occurred-date" name="occurredDate" type="date" />
+                </div>
+              </div>
+              <div class="field-group paid-date-group" id="paid-date-group" hidden>
+                <label class="field-label" for="paid-date">Quando foi pago?</label>
+                <input class="text-input" id="paid-date" name="paidDate" type="date" />
+              </div>
+
+              <label class="check-row" for="budgeted">
+                <input id="budgeted" name="budgeted" type="checkbox" checked />
+                <span class="check-mark" aria-hidden="true"></span>
+                <span><strong>Esse custo estava no meu planejamento</strong><small>Desmarque se ele não estava previsto.</small></span>
+              </label>
+
+              <details class="advanced-fields" open>
+                <summary>Campos complementares <span>Você pode recolher esta seção</span></summary>
+                <div class="field-group advanced-context">
+                  <label class="field-label" for="company-name">Empresa ou unidade de custo <span class="optional-label">opcional</span></label>
+                  <input class="text-input" id="company-name" name="companyName" type="text" maxlength="100" placeholder="Ex.: Empresa ABC, Unidade Centro" />
+                </div>
+                <div class="field-group advanced-context">
+                  <label class="field-label" for="client-name">Cliente, fornecedor ou favorecido <span class="optional-label">opcional</span></label>
+                  <input class="text-input" id="client-name" name="clientName" type="text" maxlength="100" placeholder="Ex.: Papelaria Central" />
+                </div>
+                <div class="field-row advanced-row">
+                  <div class="field-group">
+                    <label class="field-label" for="cost-type">Tipo <span class="optional-label">opcional</span></label>
+                    <input class="text-input" id="cost-type" name="costType" type="text" maxlength="60" placeholder="Ex.: manutenção" />
+                  </div>
+                  <div class="field-group">
+                    <label class="field-label" for="order-reference">Pedido ou referência <span class="optional-label">opcional</span></label>
+                    <input class="text-input" id="order-reference" name="orderReference" type="text" maxlength="80" placeholder="Ex.: PED-204, contrato ou chamado" />
+                  </div>
+                </div>
+                <div class="field-group advanced-context">
+                  <label class="field-label" for="observations">Observações <span class="optional-label">opcional</span></label>
+                  <textarea class="text-input text-area" id="observations" name="observations" maxlength="500" rows="3" placeholder="Anote informações que ajudem a identificar ou prestar contas deste custo."></textarea>
+                </div>
+              </details>
+
+              <div class="form-feedback" id="form-feedback" role="status" aria-live="polite"></div>
+              <div class="form-actions">
+                <button class="button button-primary button-wide" type="submit">Salvar custo</button>
+                <span class="secure-note"><span aria-hidden="true">●</span> Um custo, um registro. Sem duplicar a saída.</span>
+              </div>
+            </form>
+          </article>
+
+          <article class="panel activity-panel" data-module-view="planning">
+            <div class="panel-heading activity-heading">
+              <div><p class="eyebrow">PLANEJAFÁCIL BY KAIROB</p><h2>Custos registrados</h2></div>
+              <button class="icon-button" type="button" id="refresh-list" aria-label="Atualizar lista">↻</button>
+            </div>
+            <p class="results-count" id="cost-results-count" aria-live="polite"></p>
+            <div class="activity-legend"><span><i class="dot dot-plan"></i>Previsão</span><span><i class="dot dot-waiting"></i>A pagar</span><span><i class="dot dot-paid"></i>Pago</span></div>
+            <div id="cost-list" class="cost-list"></div>
+            <div id="empty-state" class="empty-state" hidden>
+              <span aria-hidden="true">▤</span>
+              <strong>Seus custos aparecem aqui</strong>
+              <p>Registre o primeiro custo pelo formulário. Ele também alimentará esta visão do Conta Fácil.</p>
+            </div>
+          </article>
+        </section>
+
+          <section class="panel cashflow-placeholder" data-module-view="cashflow" hidden aria-labelledby="cashflow-title">
+          <div class="panel-heading">
+            <div><p class="eyebrow">CONTA FÁCIL BY KAIROB</p><h2 id="cashflow-title">Fluxo de caixa</h2></div>
+          </div>
+          <p class="panel-intro">O Conta Fácil terá lançamentos e campos próprios: data, tipo, categoria, descrição, valor, forma de pagamento, profissional, cliente e status.</p>
+          <p class="panel-intro">Esta área não reutiliza o formulário de custos do PlanejaFácil. Os indicadores consolidados ficam na Visão geral.</p>
+        </section>
+
+        <footer class="page-footer">
+          <span>KAIROB Sistemas Integrados</span>
+          <span>PlanejaFácil by KAIROB · Conta Fácil by KAIROB</span>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+(function exposeCostDomain() {
+const COST_STATUS = Object.freeze({
+  PLANNED: 'planned',
+  INCURRED: 'incurred',
+  PAID: 'paid',
+});
+
+function parseBrlToCents(input) {
+  const value = String(input ?? '').trim().replace(/^R\$\s*/i, '');
+  if (!value) return null;
+
+  const normalized = value.replace(/\./g, '').replace(',', '.');
+  if (!/^\d+(\.\d{1,2})?$/.test(normalized)) return null;
+  const amount = Number(normalized);
+  if (!Number.isFinite(amount) || amount <= 0) return null;
+  return Math.round(amount * 100);
+}
+
+function createCost(input, now = new Date()) {
+  const description = String(input.description ?? '').trim();
+  if (!description) throw new Error('Informe o que esse custo representa.');
+  if (description.length > 100) throw new Error('A descrição deve ter até 100 caracteres.');
+  const plannedAmountCents = input.plannedAmountCents ?? input.amountCents ?? 0;
+  const actualAmountCents = input.actualAmountCents ?? (input.status === COST_STATUS.PLANNED ? 0 : input.amountCents ?? 0);
+  if (!Number.isInteger(plannedAmountCents) || plannedAmountCents < 0 || !Number.isInteger(actualAmountCents) || actualAmountCents < 0) {
+    throw new Error('Informe valores válidos para previsto e realizado.');
+  }
+  if (!input.expectedDate || Number.isNaN(Date.parse(`${input.expectedDate}T12:00:00`))) {
+    throw new Error('Informe uma data válida.');
+  }
+  if (!Object.values(COST_STATUS).includes(input.status)) {
+    throw new Error('Escolha uma situação válida para o custo.');
+  }
+  if (input.status === COST_STATUS.PLANNED && (!input.budgeted || plannedAmountCents <= 0)) {
+    throw new Error('Para salvar uma previsão, informe um valor previsto e mantenha o custo planejado.');
+  }
+  if (input.status !== COST_STATUS.PLANNED && actualAmountCents <= 0) {
+    throw new Error('Informe o valor realizado, maior que zero.');
+  }
+  const optionalFields = {
+    companyName: String(input.companyName ?? input.contextName ?? '').trim(),
+    clientName: String(input.clientName ?? '').trim(),
+    type: String(input.type ?? '').trim(),
+    orderReference: String(input.orderReference ?? '').trim(),
+    observations: String(input.observations ?? '').trim(),
+  };
+  if (optionalFields.companyName.length > 100 || optionalFields.clientName.length > 100 || optionalFields.type.length > 60 || optionalFields.orderReference.length > 80 || optionalFields.observations.length > 500) {
+    throw new Error('Um dos campos complementares excede o tamanho permitido.');
+  }
+
+  const today = now.toISOString().slice(0, 10);
+  const statusDate = input.status === COST_STATUS.PLANNED ? null : (input.occurredDate || today);
+  const paidDate = input.status === COST_STATUS.PAID ? (input.paidDate || today) : null;
+  const validDate = (value) => /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(Date.parse(`${value}T12:00:00`));
+  if (!validDate(input.expectedDate) || (statusDate && !validDate(statusDate)) || (paidDate && !validDate(paidDate))) {
+    throw new Error('Confira as datas previstas, realizadas e de pagamento.');
+  }
+
+  return {
+    id: input.id || globalThis.crypto?.randomUUID?.() || `cost-${now.getTime()}-${Math.random().toString(16).slice(2)}`,
+    description,
+    ...optionalFields,
+    category: String(input.category || 'Outra').trim(),
+    plannedAmountCents,
+    actualAmountCents,
+    expectedDate: input.expectedDate,
+    budgeted: Boolean(input.budgeted),
+    status: input.status,
+    occurredDate: statusDate,
+    paidDate,
+    createdAt: now.toISOString(),
+  };
+}
+
+function advanceCostStatus(cost, now = new Date()) {
+  if (cost.status === COST_STATUS.PLANNED) {
+    return { ...cost, status: COST_STATUS.INCURRED, occurredDate: now.toISOString().slice(0, 10) };
+  }
+  if (cost.status === COST_STATUS.INCURRED) {
+    return { ...cost, status: COST_STATUS.PAID, paidDate: now.toISOString().slice(0, 10) };
+  }
+  return cost;
+}
+
+function summarizeCosts(costs) {
+  return costs.reduce((summary, cost) => {
+    const planned = cost.plannedAmountCents ?? (cost.budgeted ? cost.amountCents : 0);
+    const actual = cost.actualAmountCents ?? (cost.status === COST_STATUS.PLANNED ? 0 : cost.amountCents);
+    if (cost.budgeted) summary.plannedCents += planned;
+    if (cost.status === COST_STATUS.INCURRED || cost.status === COST_STATUS.PAID) {
+      summary.incurredCents += actual;
+    }
+    if (cost.status === COST_STATUS.INCURRED) summary.pendingCents += actual;
+    if (cost.status === COST_STATUS.PAID) summary.paidCents += actual;
+    summary.differenceCents += planned - actual;
+    return summary;
+  }, { plannedCents: 0, incurredCents: 0, pendingCents: 0, paidCents: 0, differenceCents: 0 });
+}
+
+function formatBrl(cents) {
+  return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+const costDomain = { COST_STATUS, parseBrlToCents, createCost, advanceCostStatus, summarizeCosts, formatBrl };
+globalThis.KAIROBCosts = costDomain;
+if (typeof module !== 'undefined' && module.exports) module.exports = costDomain;
+})();
+
+(function exposeDemoRepository() {
+const STORAGE_KEY = 'kairob.platform.demo.costs.v1';
+let memoryCosts = null;
+
+const examples = [
+  { id: 'demo-1', description: 'Compra de materiais', category: 'Materiais', amountCents: 45890, expectedDate: '2026-11-14', budgeted: true, status: 'planned', occurredDate: null, paidDate: null, createdAt: '2026-11-10T12:00:00.000Z' },
+  { id: 'demo-2', description: 'Manutenção do equipamento', category: 'Serviços', amountCents: 32000, expectedDate: '2026-11-09', budgeted: false, status: 'incurred', occurredDate: '2026-11-09', paidDate: null, createdAt: '2026-11-09T12:00:00.000Z' },
+  { id: 'demo-3', description: 'Internet do escritório', category: 'Serviços', amountCents: 12990, expectedDate: '2026-11-05', budgeted: true, status: 'paid', occurredDate: '2026-11-05', paidDate: '2026-11-05', createdAt: '2026-11-05T12:00:00.000Z' },
+];
+
+function getDemoCosts() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === null) {
+      memoryCosts = [...examples];
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memoryCosts)); } catch { /* Local-only fallback below. */ }
+      return [...examples];
+    }
+    const parsed = JSON.parse(saved);
+    memoryCosts = Array.isArray(parsed) ? parsed : [...examples];
+    return [...memoryCosts];
+  } catch {
+    if (memoryCosts === null) memoryCosts = [...examples];
+    return [...memoryCosts];
+  }
+}
+
+function saveDemoCosts(costs) {
+  memoryCosts = [...costs];
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(memoryCosts)); } catch { /* Keep this session usable if local storage is blocked. */ }
+}
+
+function clearDemoCosts() {
+  memoryCosts = [];
+  try { localStorage.removeItem(STORAGE_KEY); } catch { /* Clearing the in-memory demo still works. */ }
+}
+
+const demoRepository = { getDemoCosts, saveDemoCosts, clearDemoCosts };
+globalThis.KAIROBDemoRepository = demoRepository;
+if (typeof module !== 'undefined' && module.exports) module.exports = demoRepository;
+})();
+
+const { advanceCostStatus, COST_STATUS, createCost, formatBrl, parseBrlToCents, summarizeCosts } = window.KAIROBCosts;
+const { clearDemoCosts, getDemoCosts, saveDemoCosts } = window.KAIROBDemoRepository;
+
+let costs = getDemoCosts();
+let costFormExpanded = false;
+const form = document.querySelector('#cost-form');
+const list = document.querySelector('#cost-list');
+const emptyState = document.querySelector('#empty-state');
+const feedback = document.querySelector('#form-feedback');
+const today = new Date();
+const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
+document.querySelector('#expected-date').value = localDate;
+document.querySelector('#occurred-date').value = localDate;
+document.querySelector('#paid-date').value = localDate;
+
+const statusLabels = {
+  [COST_STATUS.PLANNED]: 'Previsão',
+  [COST_STATUS.INCURRED]: 'A pagar',
+  [COST_STATUS.PAID]: 'Pago',
+};
+
+function showMoney(elementId, amount) {
+  document.querySelector(`#${elementId}`).textContent = formatBrl(amount);
+}
+
+function formatDate(date) {
+  if (!date) return 'Sem data';
+  const [year, month, day] = date.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+const filterDefinitions = [
+  { id: 'filter-company', getValue: (cost) => cost.companyName || cost.contextName, defaultLabel: 'Todas as empresas' },
+  { id: 'filter-category', getValue: (cost) => cost.category, defaultLabel: 'Todas as categorias' },
+  { id: 'filter-type', getValue: (cost) => cost.type, defaultLabel: 'Todos os tipos' },
+  { id: 'filter-order', getValue: (cost) => cost.orderReference, suggestionsId: 'order-filter-options', search: true },
+  { id: 'filter-observation', getValue: (cost) => cost.observations, defaultLabel: 'Todas as observações' },
+  { id: 'filter-month', getValue: (cost) => cost.expectedDate?.slice(0, 7), defaultLabel: 'Todos os períodos' },
+];
+
+function normalizeFilterText(value) {
+  return String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLocaleLowerCase('pt-BR');
+}
+
+function updateFilterOptions() {
+  filterDefinitions.forEach(({ id, getValue, defaultLabel, suggestionsId, search }) => {
+    const select = document.querySelector(`#${id}`);
+    const previous = select.value;
+    const values = [...new Set(costs.map(getValue).map((value) => String(value || '').trim()).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    if (search) {
+      const suggestions = document.querySelector(`#${suggestionsId}`);
+      suggestions.replaceChildren(...values.map((value) => new Option(value, value)));
+      return;
+    }
+    select.replaceChildren(new Option(defaultLabel, ''));
+    values.forEach((value) => {
+      const label = id === 'filter-month'
+        ? new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(new Date(`${value}-15T12:00:00`))
+        : value;
+      select.add(new Option(label, value));
+    });
+    select.value = values.includes(previous) ? previous : '';
+  });
+}
+
+function getFilteredCosts() {
+  const filters = Object.fromEntries(filterDefinitions.map(({ id }) => [id, document.querySelector(`#${id}`).value]));
+  const onlyUnplanned = document.querySelector('#filter-unplanned').checked;
+  return costs.filter((cost) => {
+    const matches = filterDefinitions.every(({ id, getValue, search }) => {
+      if (!filters[id]) return true;
+      const value = String(getValue(cost) || '').trim();
+      return search
+        ? normalizeFilterText(value).includes(normalizeFilterText(filters[id]))
+        : value === filters[id];
+    });
+    const isUnplanned = cost.budgeted === false || (cost.plannedAmountCents ?? cost.amountCents ?? 0) === 0;
+    return matches && (!onlyUnplanned || isUnplanned);
+  });
+}
+
+function render() {
+  const summary = summarizeCosts(costs);
+  showMoney('total-planned', summary.plannedCents);
+  showMoney('total-incurred', summary.incurredCents);
+  showMoney('total-difference', summary.differenceCents);
+  const differenceValue = document.querySelector('#total-difference');
+  differenceValue.classList.toggle('is-over-budget', summary.differenceCents < 0);
+  differenceValue.classList.toggle('is-under-budget', summary.differenceCents >= 0);
+  showMoney('total-pending', summary.pendingCents);
+  showMoney('total-paid', summary.paidCents);
+  updateFilterOptions();
+  const visibleCosts = getFilteredCosts();
+  list.replaceChildren();
+  emptyState.hidden = visibleCosts.length > 0;
+  const emptyTitle = emptyState.querySelector('strong');
+  const emptyMessage = emptyState.querySelector('p');
+  emptyTitle.textContent = costs.length === 0 ? 'Seus custos aparecem aqui' : 'Nenhum custo encontrado';
+  emptyMessage.textContent = costs.length === 0
+    ? 'Registre o primeiro custo pelo botão Novo custo.'
+    : 'Ajuste ou limpe os filtros para ver outros custos.';
+  document.querySelector('#cost-results-count').textContent = `${visibleCosts.length} de ${costs.length} custos`;
+
+  [...visibleCosts].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')).forEach((cost) => {
+    const item = document.createElement('article');
+    item.className = 'cost-item';
+
+    const symbol = document.createElement('span');
+    symbol.className = 'cost-symbol';
+    symbol.setAttribute('aria-hidden', 'true');
+    symbol.textContent = cost.category.slice(0, 1).toUpperCase();
+
+    const main = document.createElement('div');
+    main.className = 'cost-main';
+    const description = document.createElement('strong');
+    description.textContent = cost.description;
+    const meta = document.createElement('div');
+    meta.className = 'cost-meta';
+    const category = document.createElement('span');
+    category.textContent = cost.category;
+    const separator = document.createElement('span');
+    separator.textContent = '·';
+    const date = document.createElement('span');
+    date.textContent = cost.status === COST_STATUS.PLANNED
+      ? `Previsto para ${formatDate(cost.expectedDate)}`
+      : `Realizado em ${formatDate(cost.occurredDate)}${cost.status === COST_STATUS.PAID ? ` · pago em ${formatDate(cost.paidDate)}` : ' · a pagar'}`;
+    const status = document.createElement('span');
+    status.className = `status-pill status-${cost.status}`;
+    status.textContent = statusLabels[cost.status];
+    meta.append(category, separator, date, status);
+    if (cost.companyName || cost.contextName) {
+      const context = document.createElement('span');
+      context.textContent = cost.companyName || cost.contextName;
+      meta.append(context);
+    }
+    if (cost.clientName) {
+      const client = document.createElement('span');
+      client.textContent = `Favorecido: ${cost.clientName}`;
+      meta.append(client);
+    }
+    if (cost.type) {
+      const type = document.createElement('span');
+      type.textContent = `Tipo: ${cost.type}`;
+      meta.append(type);
+    }
+    if (cost.orderReference) {
+      const order = document.createElement('span');
+      order.textContent = `Pedido/projeto: ${cost.orderReference}`;
+      meta.append(order);
+    }
+    if (!cost.budgeted) {
+      const unplanned = document.createElement('span');
+      unplanned.className = 'unplanned-label';
+      unplanned.textContent = 'Não previsto';
+      meta.append(unplanned);
+    }
+    main.append(description, meta);
+    if (cost.observations) {
+      const note = document.createElement('small');
+      note.className = 'cost-note';
+      note.textContent = cost.observations;
+      main.append(note);
+    }
+
+    const side = document.createElement('div');
+    side.className = 'cost-side';
+    const amount = document.createElement('span');
+    amount.className = 'cost-amount';
+    const plannedAmount = cost.plannedAmountCents ?? (cost.budgeted ? cost.amountCents : 0);
+    const actualAmount = cost.actualAmountCents ?? (cost.status === COST_STATUS.PLANNED ? 0 : cost.amountCents);
+    amount.textContent = formatBrl(cost.status === COST_STATUS.PLANNED ? plannedAmount : actualAmount);
+    side.append(amount);
+    if (cost.status !== COST_STATUS.PLANNED && cost.budgeted) {
+      const plannedNote = document.createElement('small');
+      plannedNote.className = 'cost-planned-note';
+      plannedNote.textContent = `Previsto: ${formatBrl(plannedAmount)}`;
+      side.append(plannedNote);
+    }
+    if (cost.status !== COST_STATUS.PAID) {
+      const advance = document.createElement('button');
+      advance.type = 'button';
+      advance.className = 'advance-button';
+      advance.dataset.action = 'advance';
+      advance.dataset.id = cost.id;
+      advance.textContent = cost.status === COST_STATUS.PLANNED ? 'Marcar como realizado' : 'Registrar pagamento';
+      side.append(advance);
+    }
+
+    item.append(symbol, main, side);
+    list.append(item);
+  });
+}
+
+function setFieldError(id, message) {
+  document.querySelector(`#${id}-error`).textContent = message;
+}
+
+function updateStatusFields() {
+  const isPlanned = form.elements.status.value === COST_STATUS.PLANNED;
+  const isPaid = form.elements.status.value === COST_STATUS.PAID;
+  document.querySelector('#actual-fields').hidden = isPlanned;
+  document.querySelector('#paid-date-group').hidden = !isPaid;
+  form.elements.actualAmount.required = !isPlanned;
+  if (!isPlanned && !form.elements.occurredDate.value) form.elements.occurredDate.value = localDate;
+  if (isPaid && !form.elements.paidDate.value) form.elements.paidDate.value = localDate;
+  document.querySelector('#planned-hint').textContent = form.elements.budgeted.checked
+    ? 'Valor de referência do planejamento'
+    : 'Este custo foi marcado como não previsto';
+}
+
+function showSubmitError(message, fieldId) {
+  feedback.textContent = message;
+  feedback.classList.remove('is-success');
+  if (fieldId) {
+    setFieldError(fieldId, message);
+    const field = fieldId === 'planned' ? form.elements.plannedAmount : form.elements.actualAmount;
+    field.focus();
+  }
+}
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  feedback.textContent = '';
+  feedback.classList.remove('is-success');
+  setFieldError('description', '');
+  setFieldError('planned', '');
+  setFieldError('actual', '');
+
+  const plannedAmountCents = form.elements.budgeted.checked
+    ? parseBrlToCents(form.elements.plannedAmount.value)
+    : 0;
+  if (form.elements.budgeted.checked && plannedAmountCents === null) {
+    showSubmitError('Digite o valor previsto, por exemplo 125,50.', 'planned');
+    return;
+  }
+  const actualAmountCents = form.elements.status.value === COST_STATUS.PLANNED
+    ? 0
+    : parseBrlToCents(form.elements.actualAmount.value);
+  if (form.elements.status.value !== COST_STATUS.PLANNED && actualAmountCents === null) {
+    showSubmitError('Digite o valor realizado, por exemplo 125,50.', 'actual');
+    return;
+  }
+
+  try {
+    const cost = createCost({
+      description: form.elements.description.value,
+      plannedAmountCents: plannedAmountCents ?? 0,
+      actualAmountCents: actualAmountCents ?? 0,
+      category: form.elements.category.value,
+      expectedDate: form.elements.expectedDate.value,
+      status: form.elements.status.value,
+      budgeted: form.elements.budgeted.checked,
+      companyName: form.elements.companyName.value,
+      clientName: form.elements.clientName.value,
+      type: form.elements.costType.value,
+      orderReference: form.elements.orderReference.value,
+      observations: form.elements.observations.value,
+      occurredDate: form.elements.occurredDate.value,
+      paidDate: form.elements.paidDate.value,
+    });
+    costs = [cost, ...costs];
+    saveDemoCosts(costs);
+    render();
+    feedback.textContent = cost.status === COST_STATUS.PAID
+      ? 'Custo salvo. O pagamento foi refletido uma vez na Visão geral.'
+      : 'Custo salvo. A Visão geral foi atualizada.';
+    feedback.classList.add('is-success');
+    form.reset();
+    document.querySelector('#expected-date').value = localDate;
+    document.querySelector('#occurred-date').value = localDate;
+    document.querySelector('#paid-date').value = localDate;
+    document.querySelector('#budgeted').checked = true;
+    updateStatusFields();
+    costFormExpanded = false;
+    document.querySelector('#cost-form-panel').hidden = true;
+  } catch (error) {
+    showSubmitError(error.message || 'Não foi possível salvar o custo neste navegador.', error.message?.includes('previsto') ? 'planned' : error.message?.includes('realizado') ? 'actual' : null);
+  }
+});
+
+form.elements.status.addEventListener('change', updateStatusFields);
+form.elements.budgeted.addEventListener('change', updateStatusFields);
+
+list.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-action="advance"]');
+  if (!button) return;
+  const now = new Date();
+  costs = costs.map((cost) => cost.id === button.dataset.id ? advanceCostStatus(cost, now) : cost);
+  saveDemoCosts(costs);
+  render();
+});
+
+document.querySelector('#new-cost-top').addEventListener('click', () => {
+  setActiveView('planning');
+  costFormExpanded = true;
+  document.querySelector('#cost-form-panel').hidden = false;
+  feedback.textContent = '';
+  feedback.classList.remove('is-success');
+  document.querySelector('#description').focus();
+  document.querySelector('#cost-form-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+document.querySelector('#close-cost-form').addEventListener('click', () => {
+  costFormExpanded = false;
+  document.querySelector('#cost-form-panel').hidden = true;
+});
+
+document.querySelectorAll('.cost-filter').forEach((control) => {
+  control.addEventListener('input', render);
+  control.addEventListener('change', render);
+});
+
+document.querySelector('#clear-cost-filters').addEventListener('click', () => {
+  document.querySelectorAll('.cost-filter').forEach((control) => {
+    if (control.type === 'checkbox') control.checked = false;
+    else control.value = '';
+  });
+  render();
+});
+
+document.querySelector('#refresh-list').addEventListener('click', render);
+document.querySelector('#clear-demo').addEventListener('click', () => {
+  clearDemoCosts();
+  costs = [];
+  render();
+  feedback.textContent = 'Demonstração limpa. Cadastre um novo custo para começar.';
+  feedback.classList.add('is-success');
+});
+
+function setActiveView(section) {
+  document.querySelectorAll('[data-view]').forEach((item) => item.classList.toggle('is-active', item.dataset.view === section));
+  document.querySelectorAll('[data-module-view]').forEach((item) => {
+    item.hidden = item.dataset.moduleView !== section || (item.id === 'cost-form-panel' && !costFormExpanded);
+  });
+  const activeButton = document.querySelector(`[data-view="${section}"]`);
+  document.querySelector('#current-section').textContent = activeButton?.textContent.trim() || 'Visão geral';
+  const pageCopy = {
+    overview: ['KAIROB SISTEMAS INTEGRADOS', 'Visão geral do seu negócio.', 'Indicadores dos módulos contratados, consolidados em um só lugar.'],
+    planning: ['PLANEJAFÁCIL BY KAIROB', 'Custos organizados por contexto.', 'Filtre por pedido, categoria, empresa, período e encontre rapidamente o que precisa.'],
+    cashflow: ['CONTA FÁCIL BY KAIROB', 'Fluxo de caixa.', 'Lançamentos financeiros com estrutura, campos e relatórios próprios.'],
+  }[section];
+  document.querySelector('#page-eyebrow').textContent = pageCopy[0];
+  document.querySelector('#page-title').textContent = pageCopy[1];
+  document.querySelector('#page-description').textContent = pageCopy[2];
+  document.querySelector('#new-cost-top').hidden = section !== 'planning';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('[data-view]').forEach((button) => {
+  button.addEventListener('click', () => setActiveView(button.dataset.view));
+});
+
+setActiveView('overview');
+render();
+updateStatusFields();
+
+    </script>
+  </body>
+</html>
